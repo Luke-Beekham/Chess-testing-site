@@ -1,83 +1,144 @@
-const ChessPieces = document.getElementsByClassName("ChessPiece");
-const Rook = document.getElementById("Test");
-const gridbox = document.getElementById("GridBox")
-Rook.style.zIndex = 100;
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Tha Best Chess Website</title>
+        <link href="Chess.css" rel="stylesheet" />
 
-document.setAttraubte
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
 
-function GetChessPiece(button){
-    const imgs = button.querySelectorAll("img");
-    const img = imgs[0];
-    console.log(img);
-    console.log(img.getAttribute('alt'));
-}
+    </head>
+    <body onmousemove="coordinate(event)">
+        <h1>Tha Best Chess Website</h1>
+        <div id="ChessBackground">
+            <div id="GridBox">
 
-let x = 0
-let y = 0
-function coordinate(event){
-    x = event.pageX;
-    y = event.pageY;
-}
+                <button id="Test" style="grid-area: a8;" class="ChessPiece"><img  src="Chess Pieces/BlackRook.png" draggable="false" alt="BlackRook"/></button>
+                <button style="grid-area: b8;" class="ChessPiece"><img  src="Chess Pieces/BlackKnight.png" draggable="false" alt="BlackKnight"/></button>
+                <button style="grid-area: c8;" class="ChessPiece"><img  src="Chess Pieces/BlackBishop.png" draggable="false" alt="BlackBishop"/></button>
+                <button style="grid-area: d8;" class="ChessPiece"><img  src="Chess Pieces/BlackQueen.png" draggable="false" alt="BlackQueen"/></button>
+                <button style="grid-area: e8;" class="ChessPiece"><img  src="Chess Pieces/BlackKing.png" draggable="false" alt="BlackKing"/></button>
+                <button style="grid-area: f8;" class="ChessPiece"><img  src="Chess Pieces/BlackBishop.png" draggable="false" alt="BlackBishop"/></button>
+                <button style="grid-area: g8;" class="ChessPiece"><img  src="Chess Pieces/BlackKnight.png" draggable="false" alt="BlackKnight"/></button>
+                <button style="grid-area: h8;" class="ChessPiece"><img  src="Chess Pieces/BlackRook.png" draggable="false" alt="BlackRook"/></button>
 
-const ChessRows = [300,400,500,600,700,800,900,1000,1100];
-const ChessColumns = [230,330,430,530,630,730,830,930,1030];
+                <button style="grid-area: a7;" class="ChessPiece"><img  src="Chess Pieces/BlackPawn.png" draggable="false" alt="BlackPawn"/></button>
+                <button style="grid-area: b7;" class="ChessPiece"><img  src="Chess Pieces/BlackPawn.png" draggable="false" alt="BlackPawn"/></button>
+                <button style="grid-area: c7;" class="ChessPiece"><img  src="Chess Pieces/BlackPawn.png" draggable="false" alt="BlackPawn"/></button>
+                <button style="grid-area: d7;" class="ChessPiece"><img  src="Chess Pieces/BlackPawn.png" draggable="false" alt="BlackPawn"/></button>
+                <button style="grid-area: e7;" class="ChessPiece"><img  src="Chess Pieces/BlackPawn.png" draggable="false" alt="BlackPawn"/></button>
+                <button style="grid-area: f7;" class="ChessPiece"><img  src="Chess Pieces/BlackPawn.png" draggable="false" alt="BlackPawn"/></button>
+                <button style="grid-area: g7;" class="ChessPiece"><img  src="Chess Pieces/BlackPawn.png" draggable="false" alt="BlackPawn"/></button>
+                <button style="grid-area: h7;" class="ChessPiece"><img  src="Chess Pieces/BlackPawn.png" draggable="false" alt="BlackPawn"/></button>
+                
+                <button style="grid-area: a2;" class="ChessPiece"><img  src="Chess Pieces/WhitePawn.png" draggable="false" alt="WhitePawn"/></button>
+                <button style="grid-area: b2;" class="ChessPiece"><img  src="Chess Pieces/WhitePawn.png" draggable="false" alt="WhitePawn"/></button>
+                <button style="grid-area: c2;" class="ChessPiece"><img  src="Chess Pieces/WhitePawn.png" draggable="false" alt="WhitePawn"/></button>
+                <button style="grid-area: d2;" class="ChessPiece"><img  src="Chess Pieces/WhitePawn.png" draggable="false" alt="WhitePawn"/></button>
+                <button style="grid-area: e2;" class="ChessPiece"><img  src="Chess Pieces/WhitePawn.png" draggable="false" alt="WhitePawn"/></button>
+                <button style="grid-area: f2;" class="ChessPiece"><img  src="Chess Pieces/WhitePawn.png" draggable="false" alt="WhitePawn"/></button>
+                <button style="grid-area: g2;" class="ChessPiece"><img  src="Chess Pieces/WhitePawn.png" draggable="false" alt="WhitePawn"/></button>
+                <button style="grid-area: h2;" class="ChessPiece"><img  src="Chess Pieces/WhitePawn.png" draggable="false" alt="WhitePawn"/></button>
 
-const ChessRowsKey = {
-    300: "8", 400: "7", 500: "6", 600: "5", 700: "4", 800: "3", 900: "2", 1000: "1", 1100: "0",
-  };
+                <button style="grid-area: a1;" class="ChessPiece"><img  src="Chess Pieces/WhiteRook.png" draggable="false" alt="WhiteRook"/></button>
+                <button style="grid-area: b1;" class="ChessPiece"><img  src="Chess Pieces/WhiteKnight.png" draggable="false" alt="WhiteKnight"/></button>
+                <button style="grid-area: c1;" class="ChessPiece"><img  src="Chess Pieces/WhiteBishop.png" draggable="false" alt="WhiteBishop"/></button>
+                <button style="grid-area: d1;" class="ChessPiece"><img  src="Chess Pieces/WhiteQueen.png" draggable="false" alt="WhiteQueen"/></button>
+                <button style="grid-area: e1;" class="ChessPiece"><img  src="Chess Pieces/WhiteKing.png" draggable="false" alt="WhiteKing"/></button>
+                <button style="grid-area: f1;" class="ChessPiece"><img  src="Chess Pieces/WhiteBishop.png" draggable="false" alt="WhiteBishop"/></button>
+                <button style="grid-area: g1;" class="ChessPiece"><img  src="Chess Pieces/WhiteKnight.png" draggable="false" alt="WhiteKnight"/></button>
+                <button style="grid-area: h1;" class="ChessPiece"><img  src="Chess Pieces/WhiteRook.png" draggable="false" alt="WhiteRook"/></button>
 
-const ChessColumnsKey = {
-  230: "a", 330: "b", 430: "c", 530: "d", 630: "e", 730: "f", 830: "g", 930: "h", 1030: "i"
-}
-function MoveChessPiece(button){
-    console.log(x);
-    console.log(y);
-    let SavedRowI = undefined;
-    let SavedColumnI = undefined;
-
-
-
-    for (i=0;i<=ChessColumns.length;i++){
-      if (x >= ChessColumns[i] && x < ChessColumns[i + 1] ){
-        //console.log(ChessColumnsKey[ChessColumns[i]]);
-        SavedColumnI = i;
-        console.log("YOOO")
-        console.log(SavedColumnI)
-        break;
-      }
-    }
-
-    for (i=0;i<=ChessRows.length;i++){
-      if (y >= ChessRows[i] && y < ChessRows[i+ 1]){
-        //console.log(ChessRowsKey[ChessRows[i]]);
-        SavedRowI = i;
-        console.log("YOOO")
-        console.log(SavedRowI)
-        break;
-      }
-    }
-
-    let location = ChessColumnsKey[ChessColumns[SavedColumnI]] + ChessRowsKey[ChessRows[SavedRowI]];
-    console.log(location)
-    button.style.gridArea = location;
-}
-
-
-
-for (let i = 0; i < ChessPieces.length; i++) {
-  ChessPieces[i].addEventListener('click',function(){
-    console.log("ChessAct")
-    GetChessPiece(ChessPieces[i]);
-    setTimeout(function(){
-      gridbox.addEventListener("click" ,function(event) {
-        event.preventDefault();
-        MoveChessPiece(ChessPieces[i]);
-        gridbox.removeEventListener("click",arguments.callee);
-        console.log("Event removed!!")
-      },{ once: true }) 
-    },100);
-
-
-  })
-}
-
+                
+                
+            </div>
+            <div id="ChessBoard">
+                <div id="Column1" class="Column">
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                </div>
+                <div id="Column2" class="Column">
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                </div>
+                <div id="Column3" class="Column">
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                </div>
+                <div id="Column4" class="Column">
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                </div>
+                <div id="Column5" class="Column">
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                </div>
+                <div id="Column6" class="Column">
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                </div>
+                <div id="Column7" class="Column">
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                </div>
+                <div id="Column8" class="Column">
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                    <div class="BlackTile"></div>
+                    <div class="WhiteTile"></div>
+                </div>
+    
+            
+    
+            </div>
+        </div>
+    <script src="Chess.js"></script>
+    </body>
+</html>
