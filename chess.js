@@ -119,24 +119,6 @@ function IsTileOccupied(location,button){
 
 }
 
-
-// function CheckColumn(InitalColumn,InitalRow){
-//   let CurrentColumn = 0;
-//   //console.log("We found rook")
-//   let i = 0;
-//   while (true){
-//     CurrentColumn = ColumnsLetters[i];
-//     if (!(CurrentColumn == InitalColumn)){
-//       let location = CurrentColumn + InitalRow;
-//       AddDot(location);
-//     }
-//     i += 1;
-//     if ((CurrentColumn == ColumnsLetters[7]) || (!IsTileOccupied(location))){
-//       break;
-//     }
-//   }
-// }
-
 function CheckColumn(InitalColumn,InitalRow,button){
   let CurrentColumn = InitalColumn;
   //console.log("We found rook")
@@ -226,23 +208,142 @@ function CheckRow(InitalColumn,InitalRow,button){
 
 
 
-function CheckDiagonal(InitalColumn,InitalRow){ // still needs work 
-  let CurrentRow = 0;
-  let CurrentColumn = 0;
-  let i = 0;
-  while (true){
-    CurrentRow = i;
-    if (!(toString(CurrentRow) == InitalRow)){
-      let locationRow = CurrentRow + 1;
-      locationRow = locationRow.toString();
+// function CheckDiagonal(InitalColumn,InitalRow,button){ // still needs work 
+//   let CurrentColumn = InitalColumn;
+//   let CurrentRow = Number(InitalRow);
+  
+//   let Ci = CurrentRow;
+//   let Ri = ColumnsLetters.indexOf(CurrentColumn);
+//   let location;
+//   while (true){
+//     CurrentRow = Ci;
+//     CurrentColumn = ColumnsLetters[Ri];
+//     location = CurrentColumn.toString() + CurrentRow.toString();
+//     if (!(CurrentRow.toString() == InitalRow) && !(CurrentColumn == InitalColumn)){
+      
+//       // let locationRow = CurrentRow + 1;
+//       // locationRow = locationRow.toString();
 
-      let location = InitalColumn + locationRow;
-      console.log(location);
-      AddDot(location);
-    }
-    i += 1;
-    if (( CurrentRow == 7) || (!IsTileOccupied(location))){
-      break;
+//       //location = InitalColumn + CurrentRow;
+//       AddDot(location);
+//     }
+//     Ri += 1;
+//     Ci += 1;
+//     if ((CurrentRow >= 8) || (CurrentColumn == ColumnsLetters[7]) || (IsTileOccupied(location,button))){
+//       console.log("Yay we break");
+//       break;
+//     }
+//   }
+
+//   CurrentColumn = InitalColumn;
+//   CurrentRow = Number(InitalRow);
+//   Ci = CurrentRow;
+//   Ri = ColumnsLetters.indexOf(CurrentColumn);
+//   while (true){
+//     CurrentRow = Ci;
+//     CurrentColumn = ColumnsLetters[Ri];
+//     console.log(CurrentColumn);
+//     console.log(CurrentRow);
+//     location = CurrentColumn.toString() + CurrentRow.toString();
+//     if (!(CurrentRow.toString() == InitalRow) && !(CurrentColumn == InitalColumn)){
+//       // let locationRow = CurrentRow + 1;
+//       // locationRow = locationRow.toString();
+
+//       //location = InitalColumn + CurrentRow;
+//       AddDot(location);
+//     }
+//     Ri -= 1;
+//     Ci -= 1;
+//     if ((CurrentRow <= 0) || (CurrentColumn == ColumnsLetters[0]) || (IsTileOccupied(location,button))){
+//       break;
+//     }
+//   }
+// }
+
+function CheckDiagonal(InitalColumn,InitalRow,button){ // still needs work 
+  for (let i=0;i<4;i++){
+    let CurrentColumn = InitalColumn;
+    let CurrentRow = Number(InitalRow);
+    
+    let Ri = CurrentRow;
+    let Ci = ColumnsLetters.indexOf(CurrentColumn);
+    let location;
+    while (true){
+      console.log(i);
+      CurrentRow = Ri;
+      CurrentColumn = ColumnsLetters[Ci];
+      console.log(CurrentColumn);
+      location = CurrentColumn.toString() + CurrentRow.toString();
+      if (!(CurrentRow.toString() == InitalRow) && !(CurrentColumn == InitalColumn)){
+        
+        // let locationRow = CurrentRow + 1;
+        // locationRow = locationRow.toString();
+  
+        //location = InitalColumn + CurrentRow;
+        AddDot(location);
+      }
+      let RiPostive;
+      let CiPostive;
+
+      switch (i){
+        case 0:
+          Ri += 1;
+          Ci += 1;
+
+          RiPostive = true;
+          CiPostive = true;
+          break;
+        case 1:
+          Ri -= 1;
+          Ci += 1;
+
+          RiPostive = false;
+          CiPostive = true;
+          break;
+        case 2:
+          Ri += 1;
+          Ci -= 1;
+
+          RiPostive = true;
+          CiPostive = false;
+          break;
+        case 3:
+          Ri -= 1;
+          Ci -= 1;
+
+          RiPostive = false;
+          CiPostive = false;
+          break;
+        default:
+          console.warn("AYOOOOO");
+          return;
+      }
+
+      if (RiPostive){
+        if (CurrentRow >= 8){
+          break;
+        }
+      }
+      else{
+        if (CurrentRow <= 0){
+          break;
+        }
+      }
+
+      if (CiPostive){
+        if(CurrentColumn == ColumnsLetters[7]){
+          break;
+        }
+      }
+      else{
+        if(CurrentColumn == ColumnsLetters[0]){
+          break;
+        }
+      }
+
+      if(IsTileOccupied(location,button)){
+        break;
+      }
     }
   }
 }
@@ -264,7 +365,9 @@ function AddDots(button,ChessPiece){
 
   switch (Piece) {
     case "Queen":
-      
+      CheckColumn(InitalColumn,InitalRow,button);
+      CheckRow(InitalColumn,InitalRow,button);
+      CheckDiagonal(InitalColumn,InitalRow,button);
       break;
       
     case "King":
@@ -272,10 +375,11 @@ function AddDots(button,ChessPiece){
 
     case "Rook":
       CheckColumn(InitalColumn,InitalRow,button);
-      CheckRow(InitalColumn,InitalRow,button)
+      CheckRow(InitalColumn,InitalRow,button);
 
       break;
     case "Bishop":
+      CheckDiagonal(InitalColumn,InitalRow,button);
       break;
     case "Knight":
       break;
