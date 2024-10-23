@@ -403,9 +403,107 @@ function CheckKnightMove(InitalColumn,InitalRow,button){
 
 
   }
+}
+
+function CheckPawnMove(InitalColumn,InitalRow,button){
+  let CurrentColumn = InitalColumn;
+  let CurrentRow = Number(InitalRow);
+
+  let location;
+
+  let Ri = CurrentRow;
+  let Ci = ColumnsLetters.indexOf(CurrentColumn);
+
+  let text = GetChessPiece(button);
+
+  let piece = "";
+
+  for (let i=0; i<5;i++){
+    piece += text[i];
+  }
 
 
+  let PawnMovesR;
+  let PawnMovesC;
+  switch (piece){
+    case "Black":
+      PawnMovesR = [-1,-1,-1,-2];
+      PawnMovesC = [0,1,-1,0];
+      break;
+    case "White":
+      PawnMovesR = [1,1,1,2];
+      PawnMovesC = [0,1,-1,0];
+      break;
+    default:
+      console.warn("No color dectected")
+      return;
+  }
+
+
+
+  function Reset(){
+    CurrentColumn = InitalColumn;
+    CurrentRow = Number(InitalRow);
   
+    Ri = CurrentRow;
+    Ci = ColumnsLetters.indexOf(CurrentColumn);
+  }
+
+  for (let i = 0; i<4;i++){
+    console.log(i);
+    Reset();
+    console.log(Ci);
+
+    Ri += PawnMovesR[i];
+    Ci += PawnMovesC[i];
+
+
+    CurrentRow = Ri;
+    CurrentColumn = ColumnsLetters[Ci];
+
+    if (Ci < 0 || Ri < 0){
+      continue
+    }
+    if (CurrentColumn == undefined){
+      console.log("Currentcolumn no exist");
+      continue;
+      
+    }
+
+    console.log(Ci);
+    location = CurrentColumn.toString() + CurrentRow.toString();
+
+    switch (i){
+      case 0:
+        if (!IsTileOccupied(location)){
+          AddDot(location,button);
+        }
+        break;
+      case 3:
+        if ((!IsTileOccupied(location)) && ((InitalRow == 2) || (InitalRow == 7))){
+          AddDot(location,button);
+          console.log("We add button");
+        }
+
+        break;
+      default:
+        if (IsTileOccupied(location)){
+          AddDot(location,button);
+        }
+        break;
+    }
+
+    if (CurrentRow >= 9 || CurrentRow <= -1){
+      console.log("It out of bounce");
+      continue;
+    }
+    console.log("YAY WE ADD DOT!!")
+    //AddDot(location);
+
+
+
+  }
+
 }
 
 function AddDots(button,ChessPiece){
@@ -428,24 +526,21 @@ function AddDots(button,ChessPiece){
       CheckColumn(InitalColumn,InitalRow,button);
       CheckRow(InitalColumn,InitalRow,button);
       CheckDiagonal(InitalColumn,InitalRow,button);
-      break;
-      
+      break;      
     case "King":
       break;
-
     case "Rook":
       CheckColumn(InitalColumn,InitalRow,button);
       CheckRow(InitalColumn,InitalRow,button);
-
       break;
     case "Bishop":
       CheckDiagonal(InitalColumn,InitalRow,button);
       break;
     case "Knight":
       CheckKnightMove(InitalColumn,InitalRow,button);
-      
       break;
     case "Pawn":
+      CheckPawnMove(InitalColumn,InitalRow,button);
       break;
     default:
       console.warn("No piece dected!");
