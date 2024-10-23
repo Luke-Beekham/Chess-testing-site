@@ -260,7 +260,7 @@ function CheckRow(InitalColumn,InitalRow,button){
 //   }
 // }
 
-function CheckDiagonal(InitalColumn,InitalRow,button){ // still needs work 
+function CheckDiagonal(InitalColumn,InitalRow,button){ 
   for (let i=0;i<4;i++){
     let CurrentColumn = InitalColumn;
     let CurrentRow = Number(InitalRow);
@@ -348,6 +348,66 @@ function CheckDiagonal(InitalColumn,InitalRow,button){ // still needs work
   }
 }
 
+function CheckKnightMove(InitalColumn,InitalRow,button){
+
+  let CurrentColumn = InitalColumn;
+  let CurrentRow = Number(InitalRow);
+
+  let location;
+
+  let Ri = CurrentRow;
+  let Ci = ColumnsLetters.indexOf(CurrentColumn);
+
+  const KnightMovesR = [2,2,1,-1,-2,-2,1,-1];
+  const KnightMovesC = [1,-1,2,2,-1,1,-2,-2];
+
+  function Reset(){
+    CurrentColumn = InitalColumn;
+    CurrentRow = Number(InitalRow);
+  
+    Ri = CurrentRow;
+    Ci = ColumnsLetters.indexOf(CurrentColumn);
+  }
+
+  for (let i = 0; i<8;i++){
+    console.log(i);
+    Reset();
+    console.log(Ci);
+
+    Ri += KnightMovesR[i];
+    Ci += KnightMovesC[i];
+
+    CurrentRow = Ri;
+    CurrentColumn = ColumnsLetters[Ci];
+
+    if (Ci < 0 || Ri < 0){
+      continue
+    }
+    if (CurrentColumn == undefined){
+      console.log("Currentcolumn no exist");
+      continue;
+      
+    }
+
+    console.log(Ci);
+    location = CurrentColumn.toString() + CurrentRow.toString();
+
+
+    if (CurrentRow >= 9 || CurrentRow <= -1){
+      console.log("It out of bounce");
+      continue;
+    }
+    console.log("YAY WE ADD DOT!!")
+    AddDot(location);
+
+
+
+  }
+
+
+  
+}
+
 function AddDots(button,ChessPiece){
   let InitalLocation =  button.style.gridArea
   let InitalColumn = InitalLocation[0];
@@ -382,6 +442,8 @@ function AddDots(button,ChessPiece){
       CheckDiagonal(InitalColumn,InitalRow,button);
       break;
     case "Knight":
+      CheckKnightMove(InitalColumn,InitalRow,button);
+      
       break;
     case "Pawn":
       break;
