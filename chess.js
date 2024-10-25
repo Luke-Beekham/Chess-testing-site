@@ -63,16 +63,23 @@ function MoveChessPiece(button){
     }
 
     let location = ChessColumnsKey[ChessColumns[SavedColumnI]] + ChessRowsKey[ChessRows[SavedRowI]];
-    console.log(location)
-    button.style.gridArea = location;
+    let Dots = document.getElementsByClassName("Dot");
+
+    for (let i =0; i<Dots.length; i++){
+      if (Dots[i].style.gridArea == location){
+        button.style.gridArea = location;
+      }
+    }
+
+
 }
 
 
 function AddDot(location,button){
   console.log(location);
 
-  if (location[1] == 0){
-    console.log("BRuh is 0")
+  if (location[1] == 0 || location[1] >= 9){
+    console.log("BRuh is " + location[1].toString())
     return; 
   }
   let dot = document.createElement("button");
@@ -84,11 +91,37 @@ function AddDot(location,button){
     img.src = "Chess Pieces/BestDot-Photoroom.png";
   }
   else{
-    img.src = "Chess Pieces/RedCircle-Photoroom.png";
+    let nothing,targetbutton = IsTileOccupied(location,button);
+    if (targetbutton == true){
+      return;
+    }
+    console.log(targetbutton);
+    let Targettext = GetChessPiece(targetbutton);
+    let Targetcolor = ""
+    for (let i = 0;i<5;i++){
+      Targetcolor += Targettext[i];
+    }
+
+    let text = GetChessPiece(button);
+    let color = ""
+
+    for (let i=0; i<5; i++){
+      color += text[i];
+    }
+
+    console.log(Targetcolor);
+    console.log(color);
+
+    if (!(color == Targetcolor)){
+      img.src = "Chess Pieces/RedCircle-Photoroom.png";
+    }
+    else{
+     return; 
+    }
   }
   console.log("We added dot")
 
-
+  console.log(location);
   dot.appendChild(img);
 
   gridbox.appendChild(dot);
@@ -110,7 +143,7 @@ function IsTileOccupied(location,button){
       else{
         console.log("ChessPieces[i] isn't button");
         console.log(location);
-        return true;
+        return true,ChessPieces[i];
       }
     }    
   }
@@ -465,9 +498,7 @@ function CheckPawnMove(InitalColumn,InitalRow,button){
       continue
     }
     if (CurrentColumn == undefined){
-      console.log("Currentcolumn no exist");
       continue;
-      
     }
 
     console.log(Ci);
@@ -482,7 +513,6 @@ function CheckPawnMove(InitalColumn,InitalRow,button){
       case 3:
         if ((!IsTileOccupied(location)) && ((InitalRow == 2) || (InitalRow == 7))){
           AddDot(location,button);
-          console.log("We add button");
         }
 
         break;
@@ -494,10 +524,8 @@ function CheckPawnMove(InitalColumn,InitalRow,button){
     }
 
     if (CurrentRow >= 9 || CurrentRow <= -1){
-      console.log("It out of bounce");
       continue;
     }
-    console.log("YAY WE ADD DOT!!")
     //AddDot(location);
 
 
@@ -505,6 +533,55 @@ function CheckPawnMove(InitalColumn,InitalRow,button){
   }
 
 }
+
+function CheckKingMove(InitalColumn,InitalRow,button){
+  let CurrentColumn = InitalColumn;
+  let CurrentRow = Number(InitalRow);
+
+  let location;
+
+  let Ri = CurrentRow;
+  let Ci = ColumnsLetters.indexOf(CurrentColumn);
+
+  let KingMovesR = [0,1,-1,1,1,0,-1,-1];
+  let KingMovesC = [1,1,1,0,-1,-1,-1,0];
+
+  function Reset(){
+    CurrentColumn = InitalColumn;
+    CurrentRow = Number(InitalRow);
+  
+    Ri = CurrentRow;
+    Ci = ColumnsLetters.indexOf(CurrentColumn);
+  }
+
+
+  for (let i=0; i<8; i++){
+    Reset();
+      
+    Ri += KingMovesR[i];
+    Ci += KingMovesC[i];
+
+    CurrentRow = Ri;
+    CurrentColumn = ColumnsLetters[Ci];
+
+    if (Ci < 0 || Ri < 0){
+      continue
+    }
+    if (CurrentColumn == undefined){
+      continue;
+    }
+
+    location = CurrentColumn.toString() + CurrentRow.toString();
+
+    AddDot(location,button);
+
+    if (CurrentRow >= 9 || CurrentRow <= -1){
+      continue;
+    }
+  }
+
+}
+
 
 function AddDots(button,ChessPiece){
   let InitalLocation =  button.style.gridArea
@@ -528,6 +605,7 @@ function AddDots(button,ChessPiece){
       CheckDiagonal(InitalColumn,InitalRow,button);
       break;      
     case "King":
+      CheckKingMove(InitalColumn,InitalRow,button);
       break;
     case "Rook":
       CheckColumn(InitalColumn,InitalRow,button);
@@ -559,15 +637,19 @@ function RemoveAllDots(){
 }
 
 
+
 for (let i = 0; i < ChessPieces.length; i++) {
   ChessPieces[i].addEventListener('click',function(){
     console.log("ChessAct")
     let Symbol = GetChessPiece(ChessPieces[i]);
     AddDots(ChessPieces[i],Symbol)
+    ChessPieces[i].style.backgroundColor  = "yellow";
 
     
     setTimeout(function(){
       gridbox.addEventListener("click" ,function(event) {
+        console.log("CLick func");
+        ChessPieces[i].style.backgroundColor  = "transparent";
         event.preventDefault();
         MoveChessPiece(ChessPieces[i]);
         RemoveAllDots();
