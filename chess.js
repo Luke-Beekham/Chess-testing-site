@@ -1,7 +1,7 @@
 const ChessPieces = document.getElementsByClassName("ChessPiece");
 const Rook = document.getElementById("Test");
 const gridbox = document.getElementById("GridBox")
-Rook.style.zIndex = 100;
+//Rook.style.zIndex = 100;
 
 document.setAttraubte
 
@@ -82,6 +82,9 @@ function AddDot(location,button){
     console.log("BRuh is " + location[1].toString())
     return; 
   }
+
+  
+
   let dot = document.createElement("button");
   dot.style.gridArea = location; 
   dot.className = "Dot";
@@ -168,7 +171,7 @@ function CheckColumn(InitalColumn,InitalRow,button){
     }
     i += 1;
     if ((CurrentColumn == ColumnsLetters[7]) || (IsTileOccupied(location,button))){
-      if (!(CurrentColumn.toString() == InitalColumn)){
+      if ( (!(CurrentColumn.toString() == InitalColumn)) || (CurrentColumn == ColumnsLetters[7]) ){
         console.log(i);
         break;
       }
@@ -187,7 +190,7 @@ function CheckColumn(InitalColumn,InitalRow,button){
     }
     i -= 1;
     if ((CurrentColumn == ColumnsLetters[0]) || (IsTileOccupied(location,button))){
-      if (!(CurrentColumn.toString() == InitalColumn)){
+      if ((!(CurrentColumn.toString() == InitalColumn) || (CurrentColumn == ColumnsLetters[0]))){
         console.log(i);
         break;
       }
@@ -215,7 +218,7 @@ function CheckRow(InitalColumn,InitalRow,button){
     }
     i += 1;
     if ((CurrentRow >= 8) || (IsTileOccupied(location,button))){
-      if (!(CurrentRow.toString() == InitalRow)){
+      if ((!(CurrentRow.toString() == InitalRow)) || (CurrentRow >= 8)){
         console.log(i);
         console.log(IsTileOccupied(location,button));
         break;
@@ -239,7 +242,7 @@ function CheckRow(InitalColumn,InitalRow,button){
     }
     i -= 1;
     if ((CurrentRow <= 0) || (IsTileOccupied(location,button))){
-      if (!(CurrentRow.toString() == InitalRow)){
+      if ((!(CurrentRow.toString() == InitalRow)) || (CurrentRow <= 0)){
         console.log(i);
         console.log(CurrentRow);
         console.log(IsTileOccupied(location,button));
