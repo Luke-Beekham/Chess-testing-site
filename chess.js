@@ -89,10 +89,13 @@ function AddDot(location,button){
   let img = document.createElement("img");
   if (!IsTileOccupied(location,button)){
     img.src = "Chess Pieces/BestDot-Photoroom.png";
+    console.log("Img is now dot");
   }
   else{
+    console.log(button);
     let nothing,targetbutton = IsTileOccupied(location,button);
     if (targetbutton == true){
+      console.log("Targerbutton was true");
       return;
     }
     console.log(targetbutton);
@@ -113,6 +116,7 @@ function AddDot(location,button){
     console.log(color);
 
     if (!(color == Targetcolor)){
+      console.log("YO we made a RedCircle!!");
       img.src = "Chess Pieces/RedCircle-Photoroom.png";
     }
     else{
@@ -138,7 +142,7 @@ function IsTileOccupied(location,button){
         return true;  
       }
       else if(ChessPieces[i] == button){
-        return false;
+        return false,ChessPieces[i];
       }
       else{
         console.log("ChessPieces[i] isn't button");
@@ -148,8 +152,6 @@ function IsTileOccupied(location,button){
     }    
   }
   return false;
-
-
 }
 
 function CheckColumn(InitalColumn,InitalRow,button){
@@ -166,8 +168,10 @@ function CheckColumn(InitalColumn,InitalRow,button){
     }
     i += 1;
     if ((CurrentColumn == ColumnsLetters[7]) || (IsTileOccupied(location,button))){
-      console.log(i);
-      break;
+      if (!(CurrentColumn.toString() == InitalColumn)){
+        console.log(i);
+        break;
+      }
     }
   }
 
@@ -179,12 +183,14 @@ function CheckColumn(InitalColumn,InitalRow,button){
     location = CurrentColumn + InitalRow;
     if (!(CurrentColumn == InitalColumn)){
       //location = CurrentColumn + InitalRow;
-      AddDot(location);
+      AddDot(location,button);
     }
     i -= 1;
     if ((CurrentColumn == ColumnsLetters[0]) || (IsTileOccupied(location,button))){
-      console.log(i);
-      break;
+      if (!(CurrentColumn.toString() == InitalColumn)){
+        console.log(i);
+        break;
+      }
     }
   }
 }
@@ -205,13 +211,16 @@ function CheckRow(InitalColumn,InitalRow,button){
       // locationRow = locationRow.toString();
 
       //location = InitalColumn + CurrentRow;
-      AddDot(location);
+      AddDot(location,button);
     }
     i += 1;
     if ((CurrentRow >= 8) || (IsTileOccupied(location,button))){
-      console.log(i);
-      console.log(IsTileOccupied(location,button));
-      break;
+      if (!(CurrentRow.toString() == InitalRow)){
+        console.log(i);
+        console.log(IsTileOccupied(location,button));
+        break;
+      }
+
     }
 
   }
@@ -226,14 +235,16 @@ function CheckRow(InitalColumn,InitalRow,button){
       // locationRow = locationRow.toString();
 
       //location = InitalColumn + CurrentRow;
-      AddDot(location);
+      AddDot(location,button);
     }
     i -= 1;
     if ((CurrentRow <= 0) || (IsTileOccupied(location,button))){
-      console.log(i);
-      console.log(CurrentRow);
-      console.log(IsTileOccupied(location,button));
-      break;
+      if (!(CurrentRow.toString() == InitalRow)){
+        console.log(i);
+        console.log(CurrentRow);
+        console.log(IsTileOccupied(location,button));
+        break;
+      }
     }
   }
 
@@ -302,18 +313,18 @@ function CheckDiagonal(InitalColumn,InitalRow,button){
     let Ci = ColumnsLetters.indexOf(CurrentColumn);
     let location;
     while (true){
-      console.log(i);
       CurrentRow = Ri;
       CurrentColumn = ColumnsLetters[Ci];
-      console.log(CurrentColumn);
       location = CurrentColumn.toString() + CurrentRow.toString();
+      console.log(location);
       if (!(CurrentRow.toString() == InitalRow) && !(CurrentColumn == InitalColumn)){
         
         // let locationRow = CurrentRow + 1;
         // locationRow = locationRow.toString();
   
         //location = InitalColumn + CurrentRow;
-        AddDot(location);
+        console.log("Diagonal dot may be created!");
+        AddDot(location,button);
       }
       let RiPostive;
       let CiPostive;
@@ -375,7 +386,9 @@ function CheckDiagonal(InitalColumn,InitalRow,button){
       }
 
       if(IsTileOccupied(location,button)){
-        break;
+        if (!(CurrentRow.toString() == InitalRow) && !(CurrentColumn == InitalColumn)){
+          break;
+        }
       }
     }
   }
@@ -431,7 +444,7 @@ function CheckKnightMove(InitalColumn,InitalRow,button){
       continue;
     }
     console.log("YAY WE ADD DOT!!")
-    AddDot(location);
+    AddDot(location,button);
 
 
 
@@ -506,18 +519,18 @@ function CheckPawnMove(InitalColumn,InitalRow,button){
 
     switch (i){
       case 0:
-        if (!IsTileOccupied(location)){
+        if (!IsTileOccupied(location,button)){
           AddDot(location,button);
         }
         break;
       case 3:
-        if ((!IsTileOccupied(location)) && ((InitalRow == 2) || (InitalRow == 7))){
+        if ((!IsTileOccupied(location,button)) && ((InitalRow == 2) || (InitalRow == 7))){
           AddDot(location,button);
         }
 
         break;
       default:
-        if (IsTileOccupied(location)){
+        if (IsTileOccupied(location,button)){
           AddDot(location,button);
         }
         break;
@@ -662,4 +675,3 @@ for (let i = 0; i < ChessPieces.length; i++) {
 
   })
 }
-
