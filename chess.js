@@ -6,26 +6,75 @@ const gridbox = document.getElementById("GridBox")
 //Rook.style.zIndex = 100;
 
 
-function removeChessPiece(chessPiece) {
-  console.log(typeof ChessPieces);
-  console.log(ChessPieces.length);
+function removeChessPiece(button) {
   
-  const index = ChessPieces.indexOf(chessPiece);
+  const index = ChessPieces.indexOf(button);
+
+ 
   
-  chessPiece.style.gridArea = "A10";
-  chessPiece.style.display = "none";
+  button.style.gridArea = "A10";
+  button.style.display = "none";
   
-  
-  console.log(ChessPieces.length);
+
 }
 
-function GetChessPiece(button){
+function addChessPiece(Piece,color,location){
+  let button = document.createElement("button");
+
+  button.className = "ChessPiece";
+
+  let image = document.createElement("img");
+
+  let ChessPiece = color + Piece;
+
+  let imagesrc = "Chess Pieces/" + ChessPiece + ".png";
+  image.src = imagesrc;
+  image.setAttribute('alt',ChessPiece);
+  image.setAttribute('draggable',"False");
+
+
+  button.appendChild(image);
+
+  button.style.gridArea = location;
+
+  ChessPieces.push(button);
+
+  button.addEventListener('click',function(){
+    ButtonEvent(button);
+  })
+
+  gridbox.appendChild(button);
+}
+
+function GetFullChessPiece(button){
     const imgs = button.querySelectorAll("img");
     const img = imgs[0];
-    console.log(img);
-    console.log(img.getAttribute('alt'));
+   
+   
     return img.getAttribute('alt');
 }
+
+function GetChessPieceColor(button){
+  let text = GetFullChessPiece(button);
+  let color = ""
+
+  for (let i=0; i<5; i++){
+    color += text[i];
+  }
+  return color;
+}
+
+function GetChessPieceType(button){
+  let text = GetFullChessPiece(button);
+
+  let Piece = "";
+
+  for (i=5;i<text.length;i++){
+    Piece += text[i];
+  }
+  return Piece;
+}
+
 
 let x = 0
 let y = 0
@@ -49,8 +98,8 @@ const ChessColumnsKey = {
 
 
 function MoveChessPiece(button){
-    console.log(x);
-    console.log(y);
+   
+   
     let SavedRowI = undefined;
     let SavedColumnI = undefined;
 
@@ -60,8 +109,8 @@ function MoveChessPiece(button){
       if (x >= ChessColumns[i] && x < ChessColumns[i + 1] ){
         //console.log(ChessColumnsKey[ChessColumns[i]]);
         SavedColumnI = i;
-        console.log("YOOO")
-        console.log(SavedColumnI)
+       
+       
         break;
       }
     }
@@ -70,8 +119,8 @@ function MoveChessPiece(button){
       if (y >= ChessRows[i] && y < ChessRows[i+ 1]){
         //console.log(ChessRowsKey[ChessRows[i]]);
         SavedRowI = i;
-        console.log("YOOO")
-        console.log(SavedRowI)
+       
+       
         break;
       }
     }
@@ -85,21 +134,30 @@ function MoveChessPiece(button){
         img = imgs[0];
         if (img.className == "Red"){
           let nothing,Targetbutton = IsTileOccupied(location,button);
+         
           removeChessPiece(Targetbutton);
         }
         button.style.gridArea = location;
       }
     }
 
+    
+    if (GetChessPieceType(button) == "Pawn"){
+      let color = GetChessPieceColor(button);
+      if ((color == "Black" && location[1] == "1") || (color == "White" && location[1] == "8")){
+        console.log("We finna premote!!")
+       
+        removeChessPiece(button);
+        addChessPiece("Queen",color,location)
+      }
+    }
 
 }
 
 
 function AddDot(location,button){
-  console.log(location);
 
   if (location[1] == 0 || location[1] >= 9){
-    console.log("BRuh is " + location[1].toString())
     return; 
   }
 
@@ -113,34 +171,24 @@ function AddDot(location,button){
   if (!IsTileOccupied(location,button)){
     img.src = "Chess Pieces/BestDot-Photoroom.png";
     img.className = "Gray";
-    console.log("Img is now dot");
+   
   }
   else{
-    console.log(button);
+   
     let nothing,targetbutton = IsTileOccupied(location,button);
     if (targetbutton == true){
-      console.log("Targerbutton was true");
+     
       return;
     }
-    console.log(targetbutton);
-    let Targettext = GetChessPiece(targetbutton);
-    let Targetcolor = ""
-    for (let i = 0;i<5;i++){
-      Targetcolor += Targettext[i];
-    }
+   
+    let Targetcolor = GetChessPieceColor(targetbutton);
+    let color = GetChessPieceColor(button);
 
-    let text = GetChessPiece(button);
-    let color = ""
-
-    for (let i=0; i<5; i++){
-      color += text[i];
-    }
-
-    console.log(Targetcolor);
-    console.log(color);
+   
+   
 
     if (!(color == Targetcolor)){
-      console.log("YO we made a RedCircle!!");
+     
       img.src = "Chess Pieces/RedCircle-Photoroom.png";
       img.className = "Red";
     }
@@ -148,9 +196,9 @@ function AddDot(location,button){
      return; 
     }
   }
-  console.log("We added dot")
+ 
 
-  console.log(location);
+ 
   dot.appendChild(img);
 
   gridbox.appendChild(dot);
@@ -161,17 +209,17 @@ function AddDot(location,button){
 function IsTileOccupied(location,button){
   for (i=0;i<ChessPieces.length;i++){
     if ((ChessPieces[i].style.gridArea == location)){
-      console.log(button);
+     
       if (button == undefined){
-        console.log("button is underfined");
+       
         return true;  
       }
       else if(ChessPieces[i] == button){
         return false,ChessPieces[i];
       }
       else{
-        console.log("ChessPieces[i] isn't button");
-        console.log(location);
+       
+       
         return true,ChessPieces[i];
       }
     }    
@@ -194,7 +242,7 @@ function CheckColumn(InitalColumn,InitalRow,button){
     i += 1;
     if ((CurrentColumn == ColumnsLetters[7]) || (IsTileOccupied(location,button))){
       if ( (!(CurrentColumn.toString() == InitalColumn)) || (CurrentColumn == ColumnsLetters[7]) ){
-        console.log(i);
+       
         break;
       }
     }
@@ -213,7 +261,7 @@ function CheckColumn(InitalColumn,InitalRow,button){
     i -= 1;
     if ((CurrentColumn == ColumnsLetters[0]) || (IsTileOccupied(location,button))){
       if ((!(CurrentColumn.toString() == InitalColumn) || (CurrentColumn == ColumnsLetters[0]))){
-        console.log(i);
+       
         break;
       }
     }
@@ -223,14 +271,14 @@ function CheckColumn(InitalColumn,InitalRow,button){
 
 function CheckRow(InitalColumn,InitalRow,button){
   let CurrentRow = Number(InitalRow);
-  console.log("intial row" + InitalRow);
+ 
   let i = CurrentRow;
   let location;
   while (true){
     CurrentRow = i;
     location = InitalColumn + CurrentRow;
     if (!(CurrentRow.toString() == InitalRow)){
-      console.log("CurrentRow " + CurrentRow + " i: " + i);
+     
       
       // let locationRow = CurrentRow + 1;
       // locationRow = locationRow.toString();
@@ -241,8 +289,8 @@ function CheckRow(InitalColumn,InitalRow,button){
     i += 1;
     if ((CurrentRow >= 8) || (IsTileOccupied(location,button))){
       if ((!(CurrentRow.toString() == InitalRow)) || (CurrentRow >= 8)){
-        console.log(i);
-        console.log(IsTileOccupied(location,button));
+       
+       
         break;
       }
 
@@ -265,9 +313,9 @@ function CheckRow(InitalColumn,InitalRow,button){
     i -= 1;
     if ((CurrentRow <= 0) || (IsTileOccupied(location,button))){
       if ((!(CurrentRow.toString() == InitalRow)) || (CurrentRow <= 0)){
-        console.log(i);
-        console.log(CurrentRow);
-        console.log(IsTileOccupied(location,button));
+       
+       
+       
         break;
       }
     }
@@ -299,7 +347,7 @@ function CheckRow(InitalColumn,InitalRow,button){
 //     Ri += 1;
 //     Ci += 1;
 //     if ((CurrentRow >= 8) || (CurrentColumn == ColumnsLetters[7]) || (IsTileOccupied(location,button))){
-//       console.log("Yay we break");
+//      
 //       break;
 //     }
 //   }
@@ -311,8 +359,8 @@ function CheckRow(InitalColumn,InitalRow,button){
 //   while (true){
 //     CurrentRow = Ci;
 //     CurrentColumn = ColumnsLetters[Ri];
-//     console.log(CurrentColumn);
-//     console.log(CurrentRow);
+//    
+//    
 //     location = CurrentColumn.toString() + CurrentRow.toString();
 //     if (!(CurrentRow.toString() == InitalRow) && !(CurrentColumn == InitalColumn)){
 //       // let locationRow = CurrentRow + 1;
@@ -341,14 +389,14 @@ function CheckDiagonal(InitalColumn,InitalRow,button){
       CurrentRow = Ri;
       CurrentColumn = ColumnsLetters[Ci];
       location = CurrentColumn.toString() + CurrentRow.toString();
-      console.log(location);
+     
       if (!(CurrentRow.toString() == InitalRow) && !(CurrentColumn == InitalColumn)){
         
         // let locationRow = CurrentRow + 1;
         // locationRow = locationRow.toString();
   
         //location = InitalColumn + CurrentRow;
-        console.log("Diagonal dot may be created!");
+       
         AddDot(location,button);
       }
       let RiPostive;
@@ -441,9 +489,9 @@ function CheckKnightMove(InitalColumn,InitalRow,button){
   }
 
   for (let i = 0; i<8;i++){
-    console.log(i);
+   
     Reset();
-    console.log(Ci);
+   
 
     Ri += KnightMovesR[i];
     Ci += KnightMovesC[i];
@@ -455,20 +503,20 @@ function CheckKnightMove(InitalColumn,InitalRow,button){
       continue
     }
     if (CurrentColumn == undefined){
-      console.log("Currentcolumn no exist");
+     
       continue;
       
     }
 
-    console.log(Ci);
+   
     location = CurrentColumn.toString() + CurrentRow.toString();
 
 
     if (CurrentRow >= 9 || CurrentRow <= -1){
-      console.log("It out of bounce");
+     
       continue;
     }
-    console.log("YAY WE ADD DOT!!")
+   
     AddDot(location,button);
 
 
@@ -485,18 +533,12 @@ function CheckPawnMove(InitalColumn,InitalRow,button){
   let Ri = CurrentRow;
   let Ci = ColumnsLetters.indexOf(CurrentColumn);
 
-  let text = GetChessPiece(button);
-
-  let piece = "";
-
-  for (let i=0; i<5;i++){
-    piece += text[i];
-  }
+  let color = GetChessPieceColor(button);
 
 
   let PawnMovesR;
   let PawnMovesC;
-  switch (piece){
+  switch (color){
     case "Black":
       PawnMovesR = [-1,-1,-1,-2];
       PawnMovesC = [0,1,-1,0];
@@ -521,9 +563,9 @@ function CheckPawnMove(InitalColumn,InitalRow,button){
   }
 
   for (let i = 0; i<4;i++){
-    console.log(i);
+   
     Reset();
-    console.log(Ci);
+   
 
     Ri += PawnMovesR[i];
     Ci += PawnMovesC[i];
@@ -539,7 +581,7 @@ function CheckPawnMove(InitalColumn,InitalRow,button){
       continue;
     }
 
-    console.log(Ci);
+   
     location = CurrentColumn.toString() + CurrentRow.toString();
 
     switch (i){
@@ -617,11 +659,10 @@ function CheckKingMove(InitalColumn,InitalRow,button){
       continue;
     }
   }
-
 }
 
 
-function AddDots(button,ChessPiece){
+function AddDots(button){
   let InitalLocation =  button.style.gridArea
   let InitalColumn = InitalLocation[0];
   let InitalRow = InitalLocation[1];
@@ -630,11 +671,7 @@ function AddDots(button,ChessPiece){
   let CurrentRow = "1"
   
 
-  let Piece = "";
-
-  for (i=5;i<ChessPiece.length;i++){
-    Piece += ChessPiece[i];
-  }
+  let Piece = GetChessPieceType(button);
 
   switch (Piece) {
     case "Queen":
@@ -660,7 +697,7 @@ function AddDots(button,ChessPiece){
       break;
     default:
       console.warn("No piece dected!");
-      console.log(Piece);
+     
       break;
   }
 }
@@ -674,34 +711,34 @@ function RemoveAllDots(){
   }
 }
 
+function ButtonEvent(button){
+  console.log("ButtonEvent was called!")
+ 
+  if (button == undefined){
+    console.warn("Button was underfined!!");
+    return;
+  }
 
+  AddDots(button);
+  button.style.backgroundColor  = "yellow";
+
+  
+  setTimeout(function(){
+    gridbox.addEventListener("click" ,function(event) {
+     
+      button.style.backgroundColor  = "transparent";
+      event.preventDefault();
+      MoveChessPiece(button);
+      RemoveAllDots();
+
+      gridbox.removeEventListener("click",arguments.callee);
+     
+    },{ once: true }) 
+  },100);
+}
 
 for (let i = 0; i < ChessPieces.length; i++) {
   ChessPieces[i].addEventListener('click',function(){
-    console.log("ChessAct");
-    console.log(this);
-    if (ChessPieces[i] == undefined){
-      console.log("Was underfeinded")
-      return;
-    }
-    let Symbol = GetChessPiece(ChessPieces[i]);
-    AddDots(ChessPieces[i],Symbol)
-    ChessPieces[i].style.backgroundColor  = "yellow";
-
-    
-    setTimeout(function(){
-      gridbox.addEventListener("click" ,function(event) {
-        console.log("CLick func");
-        ChessPieces[i].style.backgroundColor  = "transparent";
-        event.preventDefault();
-        MoveChessPiece(ChessPieces[i]);
-        RemoveAllDots();
-
-        gridbox.removeEventListener("click",arguments.callee);
-        console.log("Event removed!!")
-      },{ once: true }) 
-    },100);
-
-
+    ButtonEvent(ChessPieces[i]);
   })
 }
