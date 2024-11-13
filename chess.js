@@ -1,9 +1,23 @@
-const ChessPieces = document.getElementsByClassName("ChessPiece");
+const ChessPiecesObject = document.getElementsByClassName("ChessPiece");
+let ChessPieces = Object.values(ChessPiecesObject);
+
 const Rook = document.getElementById("Test");
 const gridbox = document.getElementById("GridBox")
 //Rook.style.zIndex = 100;
 
-document.setAttraubte
+
+function removeChessPiece(chessPiece) {
+  console.log(typeof ChessPieces);
+  console.log(ChessPieces.length);
+  
+  const index = ChessPieces.indexOf(chessPiece);
+  
+  chessPiece.style.gridArea = "A10";
+  chessPiece.style.display = "none";
+  
+  
+  console.log(ChessPieces.length);
+}
 
 function GetChessPiece(button){
     const imgs = button.querySelectorAll("img");
@@ -67,6 +81,12 @@ function MoveChessPiece(button){
 
     for (let i =0; i<Dots.length; i++){
       if (Dots[i].style.gridArea == location){
+        imgs = Dots[i].children;
+        img = imgs[0];
+        if (img.className == "Red"){
+          let nothing,Targetbutton = IsTileOccupied(location,button);
+          removeChessPiece(Targetbutton);
+        }
         button.style.gridArea = location;
       }
     }
@@ -92,6 +112,7 @@ function AddDot(location,button){
   let img = document.createElement("img");
   if (!IsTileOccupied(location,button)){
     img.src = "Chess Pieces/BestDot-Photoroom.png";
+    img.className = "Gray";
     console.log("Img is now dot");
   }
   else{
@@ -121,6 +142,7 @@ function AddDot(location,button){
     if (!(color == Targetcolor)){
       console.log("YO we made a RedCircle!!");
       img.src = "Chess Pieces/RedCircle-Photoroom.png";
+      img.className = "Red";
     }
     else{
      return; 
@@ -656,7 +678,12 @@ function RemoveAllDots(){
 
 for (let i = 0; i < ChessPieces.length; i++) {
   ChessPieces[i].addEventListener('click',function(){
-    console.log("ChessAct")
+    console.log("ChessAct");
+    console.log(this);
+    if (ChessPieces[i] == undefined){
+      console.log("Was underfeinded")
+      return;
+    }
     let Symbol = GetChessPiece(ChessPieces[i]);
     AddDots(ChessPieces[i],Symbol)
     ChessPieces[i].style.backgroundColor  = "yellow";
